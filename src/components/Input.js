@@ -31,7 +31,38 @@ function centerAspectCrop() {
   )
 }
 
-function Input() {
+function replaceTransparentWithWhite(canvas) {
+  // Create a new canvas
+  var newCanvas = document.createElement('canvas');
+  var newCtx = newCanvas.getContext('2d');
+
+  // Set the dimensions of the new canvas to match the original canvas
+  newCanvas.width = canvas.width;
+  newCanvas.height = canvas.height;
+
+  // Get the image data from the original canvas
+  var imageData = canvas.getContext('2d').getImageData(0, 0, canvas.width, canvas.height);
+
+  // Iterate through the pixels in the image data
+  for (var i = 0; i < imageData.data.length; i += 4) {
+    // If the pixel is transparent (the alpha value is 0), replace it with white (255, 255, 255)
+    if (imageData.data[i + 3] === 0) {
+      imageData.data[i] = 255;
+      imageData.data[i + 1] = 255;
+      imageData.data[i + 2] = 255;
+      imageData.data[i + 3] = 1;
+    }
+  }
+
+  // Put the modified image data on the new canvas
+  newCtx.putImageData(imageData, 0, 0);
+
+  // Return the new canvas
+  return newCanvas;
+}
+
+
+function Input({onOutputUpdate}) {
   const [imgSrc, setImgSrc] = useState('')
   const [files, setFiles] = useState([]);
   const [fileName, setFileName] = useState("")
@@ -166,12 +197,13 @@ function Input() {
   const handleSubmit = () => {
     const data = {
       img: previewCanvasRef.current.toDataURL(),
-      mask: drawCanvasRef.current.toDataURL(),
+      mask: replaceTransparentWithWhite(drawCanvasRef.current).toDataURL(),
       model: model,
       steps: steps,
     }
 
     console.log(data);
+    onOutputUpdate(data);
   }
 
   return (

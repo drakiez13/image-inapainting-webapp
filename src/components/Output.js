@@ -1,23 +1,20 @@
 import React from "react";
-import maskImg from "../assets/img/mask.png"
-import inpaint from "../assets/img/inpaint.png"
-import maskedImg from "../assets/img/masked_image.png"
 
-function Output() {
+function Output({outImgs}) {
     return (
         <>
             <div className="output-component">
                 <div>
                     <label className="output-label">mask</label>
-                    <img src={maskImg} className="output-img" alt="mask"></img>
+                    <img src={outImgs.maskImg} className="output-img" alt="mask"></img>
                 </div>
                 <div>
                     <label className="output-label">inpaint</label>
-                    <img src={inpaint} className="output-img" alt="inpaint"></img>
+                    <img src={outImgs.inpaint} className="output-img" alt="inpaint"></img>
                 </div>
                 <div>
                     <label className="output-label">masked image</label>
-                    <img src={maskedImg} className="output-img" alt="masked"></img>
+                    <img src={outImgs.maskedImg} className="output-img" alt="masked"></img>
                 </div>
             </div>
             <div className="down-button">
