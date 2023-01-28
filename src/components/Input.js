@@ -10,6 +10,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import Webcam from "react-webcam";
 import Model from './Model';
 import Steps from './Steps';
+import NJumpTime from './NJumpTime';
 import Resize from './Resize';
 
 function centerAspectCrop() {
@@ -73,7 +74,8 @@ function Input({onOutputUpdate}) {
   const [showWebCam, setShowWebCam] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
   const [model, setModel] = useState("CelebA-HQ")
-  const [steps, setSteps] = useState(30)
+  const [steps, setSteps] = useState(200)
+  const [nJumpTime, setNJumpTime] = useState(3)
   const [size, setSize] = useState(64)
   const previewCanvasRef = useRef(null)
   const drawCanvasRef = useRef(null);
@@ -200,6 +202,7 @@ function Input({onOutputUpdate}) {
       mask: replaceTransparentWithWhite(drawCanvasRef.current).toDataURL(),
       model: model,
       steps: steps,
+      n_jump_time: nJumpTime
     }
 
     console.log(data);
@@ -329,6 +332,7 @@ function Input({onOutputUpdate}) {
       )}
       <Resize setSize={(value) => { setSize(value) }}></Resize>
       <Steps value={steps} setValue={(value) => setSteps(value)}></Steps>
+      <NJumpTime value={nJumpTime} setValue={(value) => setNJumpTime(value)}></NJumpTime>
       <button className='submit-button' onClick={handleSubmit}>Submit</button>
     </div >
   )
