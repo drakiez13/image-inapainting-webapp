@@ -73,10 +73,10 @@ function Input({onOutputUpdate}) {
   const [rotate, setRotate] = useState(0)
   const [showWebCam, setShowWebCam] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
-  const [model, setModel] = useState("CelebA-HQ")
+  const [model, setModel] = useState("celeba_hq_256")
   const [steps, setSteps] = useState(200)
   const [nJumpTime, setNJumpTime] = useState(3)
-  const [size, setSize] = useState(64)
+  const [size, setSize] = useState(256)
   const previewCanvasRef = useRef(null)
   const drawCanvasRef = useRef(null);
   const contextRef = useRef(null);
@@ -198,15 +198,28 @@ function Input({onOutputUpdate}) {
 
   const handleSubmit = () => {
     const data = {
-      img: previewCanvasRef.current.toDataURL(),
-      mask: replaceTransparentWithWhite(drawCanvasRef.current).toDataURL(),
-      model: model,
-      steps: steps,
-      n_jump_time: nJumpTime
+      input : {
+        image: previewCanvasRef.current.toDataURL(),
+        mask: replaceTransparentWithWhite(drawCanvasRef.current).toDataURL(),
+        model: model,
+        steps: steps.toString(),
+        jump_n_sample: nJumpTime.toString()
+     }
     }
-
     console.log(data);
-    onOutputUpdate(data);
+
+    fetch('/predictions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log(response)
+      onOutputUpdate(response.output)
+    })
   }
 
   return (
@@ -330,7 +343,7 @@ function Input({onOutputUpdate}) {
           </div>
         </div>
       )}
-      <Resize setSize={(value) => { setSize(value) }}></Resize>
+      {/* <Resize setSize={(value) => { setSize(value) }}></Resize> */}
       <Steps value={steps} setValue={(value) => setSteps(value)}></Steps>
       <NJumpTime value={nJumpTime} setValue={(value) => setNJumpTime(value)}></NJumpTime>
       <button className='submit-button' onClick={handleSubmit}>Submit</button>

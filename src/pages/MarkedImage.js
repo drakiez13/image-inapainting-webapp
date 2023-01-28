@@ -6,7 +6,9 @@ import Output from '../components/Output';
 
 function MarkedImage() {
   const [outImgs, setOutImgs] = useState({
-
+    mask: '',
+    masked_image: '',
+    inpainted_image: ''
   });
 
   function handleOutputUpdate(output) {
@@ -21,7 +23,7 @@ function MarkedImage() {
       </div>
       <div className='output-container'>
         <h4 className='output-text'>Output</h4>
-        <Output outImgs={outImgs}></Output>
+        <Output mask={outImgs.mask} inpainted_image={outImgs.inpainted_image} masked_image={outImgs.masked_image}></Output>
       </div>
     </div>
   )

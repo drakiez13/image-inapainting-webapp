@@ -33,7 +33,7 @@ export default function InputSlider({ value, setValue }) {
     return (
         <div className='steps-container'>
             <Box>
-                <label className='steps-label label'>steps</label>
+                <label className='steps-label label'>jump_n_sample</label>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item>
                         <Input
@@ -55,8 +55,8 @@ export default function InputSlider({ value, setValue }) {
                             value={typeof value === 'number' ? value : 0}
                             onChange={handleSliderChange}
                             aria-labelledby="input-slider"
-                            min={10}
-                            max={250}
+                            min={1}
+                            max={10}
                         />
                     </Grid>
                 </Grid>
